@@ -182,7 +182,7 @@ public class BigQueryIOWriteTest implements Serializable {
                   BigQueryOptions bqOptions = options.as(BigQueryOptions.class);
                   bqOptions.setProject("project-id");
                   if (description.getAnnotations().stream().anyMatch(
-                          a -> a.annotationType().equals(BigQueryProjectID.class))) {
+                          a -> a.annotationType().equals(ProjectOverride.class))) {
                     options.as(BigQueryOptions.class).setBigQueryProject("bigquery-project-id");
                   }
                   bqOptions.setTempLocation(testFolder.getRoot().getAbsolutePath());
@@ -641,7 +641,7 @@ public class BigQueryIOWriteTest implements Serializable {
   }
 
   @Test
-  @BigQueryProjectID
+  @ProjectOverride
   public void testTriggeredFileLoadsWithTempTablesBigQueryProject() throws Exception {
     testTriggeredFileLoadsWithTempTables("bigquery-project-id:dataset-id.table-id");
   }

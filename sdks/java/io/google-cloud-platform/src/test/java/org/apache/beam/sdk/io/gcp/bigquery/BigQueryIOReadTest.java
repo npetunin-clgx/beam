@@ -36,11 +36,9 @@ import com.google.bigtable.v2.Mutation;
 import com.google.protobuf.ByteString;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.beam.sdk.coders.CoderRegistry;
 import org.apache.beam.sdk.coders.KvCoder;
@@ -109,7 +107,7 @@ public class BigQueryIOReadTest implements Serializable {
                   options = TestPipeline.testingPipelineOptions();
                   options.as(BigQueryOptions.class).setProject("project-id");
                   if (description.getAnnotations().stream().anyMatch(
-                          a -> a.annotationType().equals(BigQueryProjectID.class))) {
+                          a -> a.annotationType().equals(ProjectOverride.class))) {
                     options.as(BigQueryOptions.class).setBigQueryProject("bigquery-project-id");
                   }
                   options
@@ -300,7 +298,7 @@ public class BigQueryIOReadTest implements Serializable {
   }
 
   @Test
-  @BigQueryProjectID
+  @ProjectOverride
   public void testValidateReadSetsBigQueryProject() throws Exception {
     checkSetsProject("bigquery-project-id");
   }
