@@ -117,7 +117,7 @@ public class BigQueryIOStorageQueryTest {
                   options = TestPipeline.testingPipelineOptions().as(BigQueryOptions.class);
                   options.setProject("project-id");
                   if (description.getAnnotations().stream().anyMatch(
-                          a -> a.annotationType().equals(BigQueryProjectID.class))) {
+                          a -> a.annotationType().equals(ProjectOverride.class))) {
                     options.as(BigQueryOptions.class).setBigQueryProject("bigquery-project-id");
                   }
                   options.setTempLocation(testFolder.getRoot().getAbsolutePath());
@@ -584,7 +584,7 @@ public class BigQueryIOStorageQueryTest {
   }
 
   @Test
-  @BigQueryProjectID
+  @ProjectOverride
   public void testQuerySourceInitialSplitWithBigQueryProject_EmptyResult() throws Exception {
 
     TableReference sourceTableRef = BigQueryHelpers.parseTableSpec("bigquery-project-id:dataset.table");

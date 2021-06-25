@@ -126,7 +126,7 @@ public class BigQueryIOStorageReadTest {
                   options = TestPipeline.testingPipelineOptions();
                   options.as(BigQueryOptions.class).setProject("project-id");
                   if (description.getAnnotations().stream().anyMatch(
-                          a -> a.annotationType().equals(BigQueryProjectID.class))) {
+                          a -> a.annotationType().equals(ProjectOverride.class))) {
                     options.as(BigQueryOptions.class).setBigQueryProject("bigquery-project-id");
                   }
                   options
@@ -310,7 +310,7 @@ public class BigQueryIOStorageReadTest {
   }
 
   @Test
-  @BigQueryProjectID
+  @ProjectOverride
   public void testTableSourceEstimatedSize_WithBigQueryProject() throws Exception {
     fakeDatasetService.createDataset("bigquery-project-id", "dataset", "", "", null);
     TableReference tableRef = BigQueryHelpers.parseTableSpec("bigquery-project-id:dataset.table");
