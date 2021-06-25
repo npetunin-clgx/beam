@@ -215,7 +215,7 @@ public class BigQueryIOWriteTest implements Serializable {
   public void setUp() throws IOException, InterruptedException {
     FakeDatasetService.setUp();
     BigQueryIO.clearCreatedTables();
-
+    fakeDatasetService.createDataset("bigquery-project-id", "dataset-id", "", "", null);
     fakeDatasetService.createDataset("project-id", "dataset-id", "", "", null);
   }
 
@@ -632,8 +632,11 @@ public class BigQueryIOWriteTest implements Serializable {
                 .withoutValidation());
     p.run();
 
+    final int projectIdSplitter = tableRef.indexOf(':');
+    final String projectId = projectIdSplitter == -1 ? "project-id" : tableRef.substring(0, projectIdSplitter);
+
     assertThat(
-        fakeDatasetService.getAllRows("project-id", "dataset-id", "table-id"),
+        fakeDatasetService.getAllRows(projectId, "dataset-id", "table-id"),
         containsInAnyOrder(Iterables.toArray(elements, TableRow.class)));
   }
 
