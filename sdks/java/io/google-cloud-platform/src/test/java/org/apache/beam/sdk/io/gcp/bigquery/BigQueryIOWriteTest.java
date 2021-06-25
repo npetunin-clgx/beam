@@ -181,7 +181,10 @@ public class BigQueryIOWriteTest implements Serializable {
                   options = TestPipeline.testingPipelineOptions();
                   BigQueryOptions bqOptions = options.as(BigQueryOptions.class);
                   bqOptions.setProject("project-id");
-                  bqOptions.setBigQueryProject("project-id");
+                  if (description.getAnnotations().stream().anyMatch(
+                          a -> a.annotationType().equals(BigQueryProjectID.class))) {
+                    options.as(BigQueryOptions.class).setBigQueryProject("bigquery-project-id");
+                  }
                   bqOptions.setTempLocation(testFolder.getRoot().getAbsolutePath());
                   if (useStorageApi) {
                     bqOptions.setUseStorageWriteApi(true);
@@ -632,6 +635,12 @@ public class BigQueryIOWriteTest implements Serializable {
     assertThat(
         fakeDatasetService.getAllRows("project-id", "dataset-id", "table-id"),
         containsInAnyOrder(Iterables.toArray(elements, TableRow.class)));
+  }
+
+  @Test
+  @BigQueryProjectID
+  public void testTriggeredFileLoadsWithTempTablesBigQueryProject() throws Exception {
+    testTriggeredFileLoadsWithTempTables("bigquery-project-id:dataset-id.table-id");
   }
 
   @Test
